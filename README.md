@@ -8,6 +8,7 @@ This is a SiriProxy plugin to control Tellstick Live! lights with Siri. It has b
 - Turn off|on the *light name* light
 - Turn the *light name* light off|on
 - Set the *light name* to *50* percent
+- Make the *light name* darker
 - Is the *light name* light on|off|dimmed? (This command takes it's best guess. Tellstick *cannot* read switch positions!)
 
 ## Setup ##
