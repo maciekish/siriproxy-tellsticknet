@@ -371,7 +371,7 @@ class SiriProxy::Plugin::Tellsticknet < SiriProxy::Plugin
     request_completed
   end
 
-  listen_for /set(?: the)? ([a-z]*)(?: to)? ([0-9]*)% */i do |light_name, value|
+  listen_for /set(?: the)? ([a-z]*)(?: to)? ([0-9]*)(?: %)*/i do |light_name, value|
     light_name = light_name.strip
     print value + "\n"
 
@@ -393,25 +393,43 @@ class SiriProxy::Plugin::Tellsticknet < SiriProxy::Plugin
           value = value_original.strip.to_f / 100.0
           value = (value * 255.0) - 50
           dim(light_id, value)
-        elsif (response =~ /bright/i or response =~ /light/i )
+        elsif (response =~ /bright/i or response =~ /lighter/i )
           say "Okay, i made it a little brighter."
           value = value_original.strip.to_f / 100.0
           value = (value * 255.0) + 50
           dim(light_id, value)
         else
           say "Happy to be of service."
+    request_completed
         end
       else
         say "I couldnt set the dimmer for the " + light_name + ", sorry about that."
+	request_completed
       end
     end
     
     request_completed
   end
 
+  listen_for /lights begin/i do
+    response = `tdtool.py`
+    say response
+    printf(response)
+    
+    request_completed
+  end
+
+  listen_for /lights authenticate/i do
+    response = `tdtool.py --authenticate`
+    say response
+    printf(response)
+
+    request_completed
+  end
+
   listen_for /lights/i do
     say "You can control these lights:\n" + get_lights_speakable
-    
+
     request_completed
   end
 
